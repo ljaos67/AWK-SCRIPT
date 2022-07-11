@@ -1,0 +1,84 @@
+# Name: Leonart Jaos
+# Z-ID: z1911688
+# Date: 10/10/2020
+# Awk script to collect input sales data for a specific year
+
+# initializing station count values
+BEGIN{
+printf "Sales Data for year 2014\n"
+printf "========================\n"
+xcount=0
+x1=0
+ycount=0
+y1=0
+zcount=0
+z1=0
+total=0
+lc = 0
+}
+
+# ignoring input that contains data from differrent years
+# split function separates current record into fields
+# depending on station, variables are compounded with the data
+# if a station isn't specified, then an error message is output
+# prints individual month and sum for each input
+$1~/2014/{
+split($0,fields," ")
+if( fields[3] == "X" )
+{
+	for( i in fields )
+	{
+		if( (i == 1) || (i == 2))
+			continue;
+		else
+			xcount = xcount + fields[i]		
+			x1 = x1 + fields[i]
+	}
+	printf("%5s:\t %7.2f\n", fields[2], x1)
+	x1=0
+}
+else if( fields[3] == "Y" )
+{
+	for( i in fields )
+	{
+		if( (i == 1) || (i == 2))
+			continue;
+		else
+			ycount = ycount + fields[i]
+			y1 = y1 + fields[i]		
+	}
+	printf("%5s:\t %7.2f\n", fields[2], y1)
+	y1 = 0
+}
+else if( fields[3] == "Z" )
+{
+	for( i in fields )
+	{
+		if( (i == 1) || (i == 2))
+			continue;
+		else
+			zcount = zcount + fields[i]
+			z1 = z1 + fields[i]		
+	}
+	printf("%5s:\t %7.2f\n", fields[2], z1)
+	z1 = 0	
+}
+else
+	printf("INCORRECT INPUT STRING IGNORED")
+lc = lc + 1
+}
+
+# prints total station volume for input comounded in
+# xcount,ycount,and zcount variables
+# prints total volume between all stations and lines
+END{
+printf "========================\n"
+printf("Station volume for 2014 is:\n")
+printf("    X:\t %7.2f\n",xcount)
+printf("    Y:\t %7.2f\n",ycount)
+printf("    Z:\t %7.2f\n",zcount)
+printf("========================\n")
+total = xcount + ycount + zcount
+printf("Total:\t %7.2f\n", total)
+printf("%d records processed\n", lc)
+}
